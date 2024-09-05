@@ -1,58 +1,34 @@
 package estadisticas;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import partidos.PartidoFutbol;
 
 public class EstadisticasFutbol implements Estadisticas{
 
-    private PartidoFutbol partido;
-
-    public EstadisticasFutbol(PartidoFutbol partido) {
-        this.partido = partido;
-    }
+    private final PartidoFutbol partido;
+    private final Impresora impresora;
+    private final Registro lugarRegistro;
     
+    public EstadisticasFutbol(PartidoFutbol partido, Impresora imp, Registro reg) {
+        this.partido = partido;
+        this.impresora = imp;
+        this.lugarRegistro= reg;
+    }
     
     @Override
     public void procesarEstadisticas() {
-        
-        String ruta, texto;
-        ruta = "D:/Usuarios/Desktop/registro.txt";
-        
-        /*System.out.println("              " +partido.getEquipoLocal()+ "  vs  " + partido.getEquipoVisitante()
-                       + "\n Resultado:    " + partido.getGolesEquipoLocal() + "    -    " + partido.getGolesEquipoVisitante()
-                       + "\n Posesion:     "  + partido.getPosesionEquipoLocal() + "   -   " + partido.getPosesionEquipoVisitante()
-        );*/
-        
-        texto = "              " +partido.getEquipoLocal()+ "  vs  " + partido.getEquipoVisitante()
-                       + "\n Resultado:    " + partido.getGolesEquipoLocal() + "    -    " + partido.getGolesEquipoVisitante()
-                       + "\n Posesion:     "  + partido.getPosesionEquipoLocal() + "   -   " + partido.getPosesionEquipoVisitante();
-                  
-        //'texto' se copiará en el archivo .txt ubicado en 'ruta'.
-        try{
-            FileWriter fileWriter = new FileWriter(ruta, true);
-            BufferedWriter buffW = new BufferedWriter (fileWriter);
-            
-            buffW.write(texto);
-            buffW.newLine();
-            buffW.newLine();
-            buffW.close();
-            
-        }catch (FileNotFoundException ex) {
-            System.err.println(ex.getMessage());
-        }  
-        catch (IOException ex) {
-            System.err.println("Error leyendo o escribiendo en algun archivo.");
-        }    
-        
+        String texto;
+         texto = "              " +partido.getEquipoLocal()+ "  vs  " + partido.getEquipoVisitante()
+                       + "\nResultado:    " + partido.getGolesEquipoLocal() + "    -    " + partido.getGolesEquipoVisitante()
+                       + "\nPosesion:     "  + partido.getPosesionEquipoLocal() + "   -   " + partido.getPosesionEquipoVisitante()
+                       + "\nPartido de futbol procesado - "+ Thread.currentThread().getName();
+         
+         impresora.imprimir("Partido de futbol procesado - " + Thread.currentThread().getName() + "\n");
+         lugarRegistro.registrar(texto);
     }
+    
     @Override
     public void run() {
         procesarEstadisticas();
-        
-        System.out.println("Partido de futbol procesado");
     }
     
 }

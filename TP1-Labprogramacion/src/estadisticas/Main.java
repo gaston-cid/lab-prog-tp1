@@ -1,42 +1,37 @@
 package estadisticas;
 
+import factory.BasquetFactory;
 import factory.DeporteFactory;
 import factory.FutbolFactory;
+import factory.TenisFactory;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-//import java.io.BufferedReader;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
    
     public static void main(String[] args) {
         int instruccion;
-        
         do {
             instruccion = menu();
 
             switch (instruccion) {
                 case 1:
-                    actualizarEstadisticas();
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    actualizarEstadisticas();                   
                     break;
                 case 2:
                     mostrarEstadisticas();
                     break;
+                case 0:
+                    System.out.println("Se ha finalizado la ejecucion");
+                    break;    
                 default:
                     System.out.println("Esta instruccion no es valida");
                     break;
@@ -65,14 +60,29 @@ public class Main {
     public static void actualizarEstadisticas() {
         
         ExecutorService executor = Executors.newFixedThreadPool(5);
+        Impresora impresora = new Impresora();
+        Registro lugarRegistro = new Registro();
         
         DeporteFactory futbolFactory = new FutbolFactory();       
+        DeporteFactory basquetFactory = new BasquetFactory(); 
+        DeporteFactory tenisFactory = new TenisFactory();    
+        for (int i = 0; i < 3; i++) {
+            
+            executor.execute(futbolFactory.crearEstadistica(futbolFactory.crearPartido(), impresora, lugarRegistro));
+            executor.execute(basquetFactory.crearEstadistica(basquetFactory.crearPartido(), impresora, lugarRegistro));
+            executor.execute(tenisFactory.crearEstadistica(tenisFactory.crearPartido(), impresora, lugarRegistro));
         
-        executor.execute(futbolFactory.crearEstadistica(futbolFactory.crearPartido()));
-       
-        
+        }
         executor.shutdown();
-       
+        
+        try {
+            //Bloquea main por 'x' tiempo para que finalicen las tareas en ejecucion
+            if(!executor.awaitTermination(200, TimeUnit.MILLISECONDS)){
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }               
     }
     
 
@@ -90,57 +100,6 @@ public class Main {
         
     }
 }
-    /*
-    public static void actualizarEstadisticas() {
-        
-        ExecutorService executor = Executors.newFixedThreadPool(5);
-        
-        leerDatos();
-        
-        executor.shutdown();
-        if(!executor.awaitTermination(2, TimeUnit.SECONDS)){
-            executor.shutdownNow();
-        }
-    }
-    
-     public static void leerDatos() {
-        //Modulo que realiza la lectura de datos desde un archivo de texto y hace el llamado al modulo de carga que corresponde
-         
-        Scanner sc = new Scanner(System.in);
-        String linea, ruta;
-
-        //System.out.println("Ingrese la ruta del archivo .txt");
-        //ruta = sc.next();
-        ruta = "D:/Usuarios/Escritorio/CargaDeDatos.txt";
-   
-        try {
-            FileReader fileReader = new FileReader(ruta);
-            BufferedReader buff = new BufferedReader(fileReader);
-            
-            while((linea = buff.readLine()) != null){
-                switch(linea.charAt(0)){
-                    case 'F':
-                            
-                            break;
-                    
-                    case 'T':
-                            
-                            break;
-                    
-                    case 'B':
-                            
-                            break;                             
-                }
-            }           
-            buff.close(); 
-        } 
-        catch (FileNotFoundException ex) {
-            System.err.println(ex.getMessage());
-        }  
-        catch (IOException ex) {
-            System.err.println("Error leyendo o escribiendo en algun archivo.");
-        }       
-    }*/
     
    
     

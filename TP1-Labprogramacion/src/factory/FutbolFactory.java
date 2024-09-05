@@ -2,6 +2,8 @@ package factory;
 
 import estadisticas.Estadisticas;
 import estadisticas.EstadisticasFutbol;
+import estadisticas.Impresora;
+import estadisticas.Registro;
 import partidos.Partido;
 import partidos.PartidoFutbol;
 
@@ -13,8 +15,8 @@ public class FutbolFactory extends DeporteFactory{
     }
 
     @Override
-    public Estadisticas crearEstadistica(Partido partido) {
-        return new EstadisticasFutbol((PartidoFutbol)partido);
+    public Estadisticas crearEstadistica(Partido partido, Impresora imp, Registro reg) {
+        return new EstadisticasFutbol((PartidoFutbol)partido, imp, reg);
     }
 
     
