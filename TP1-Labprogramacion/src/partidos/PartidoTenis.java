@@ -1,7 +1,7 @@
 package partidos;
 
-public class PartidoTenis implements Partido{
-    
+public class PartidoTenis implements Partido {
+
     private String jugador1;
     private String jugador2;
     private int acesJugador1;
@@ -41,7 +41,5 @@ public class PartidoTenis implements Partido{
     public int getDoblesFaltasJugador2() {
         return doblesFaltasJugador2;
     }
-    
-    
-    
+
 }

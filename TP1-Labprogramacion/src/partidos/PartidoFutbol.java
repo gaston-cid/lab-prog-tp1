@@ -1,8 +1,7 @@
 package partidos;
 
+public class PartidoFutbol implements Partido {
 
-public class PartidoFutbol implements Partido{
-    
     private String equipoLocal;
     private String equipoVisitante;
     private int golesEquipoLocal;
@@ -42,7 +41,5 @@ public class PartidoFutbol implements Partido{
     public int getPosesionEquipoVisitante() {
         return posesionEquipoVisitante;
     }
-    
-    
-    
+
 }

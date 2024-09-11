@@ -5,8 +5,9 @@ import estadisticas.Impresora;
 import estadisticas.Registro;
 import partidos.Partido;
 
-public abstract class DeporteFactory {
-    
-    public abstract Partido crearPartido();
-    public abstract Estadisticas crearEstadistica(Partido partido, Impresora impresora,Registro reg);
+public interface DeporteFactory {
+
+    public Partido crearPartido();
+
+    public Estadisticas crearEstadistica(Partido partido, Impresora impresora, Registro reg);
 }
